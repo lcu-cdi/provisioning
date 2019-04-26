@@ -22,7 +22,17 @@ namespace LCU.CDI.Provisioning
 			[HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
 			ILogger log)
 		{
-			log.LogInformation("ProvisionResources function processed a request.");
+			log.LogInformation("ProvisionResources function processed a request.");			
+
+			dynamic request = req.Body.ToDynamic();
+
+			var azureDeployment = new AzureDeployment(request.tenantId, request.subscriptionId, request.clientId, request.clientSecret);
+
+			dynamic template = new Object().ToDynamic();
+
+			dynamic parameters = new Object().ToDynamic();
+
+			azureDeployment.DeployTemplate("testDeployment", "flw-tst", "West US 2", template, parameters);
 
 			var response = new BaseResponse<Application>();
 
