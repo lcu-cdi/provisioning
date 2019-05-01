@@ -32,7 +32,7 @@ namespace LCU.CDI.Provisioning.Functions
 
 			try
 			{
-				response.Status = CommitTemplate(request.name, request.comment, request.template, request.parameters);
+				response.Status = CommitTemplate($"templates/{request.name}", request.comment, request.template, request.parameters);
 			}
 			catch (Exception ex)
 			{
