@@ -52,7 +52,7 @@ namespace LCU.CDI.Provisioning.Functions
 			{
 				var branch = repo.Branches[branchName];
 
-				Branch currentBranch = null;
+				Branch currentBranch = Commands.Checkout(repo, repo.Branches["master"]);
 
 				if (branch == null)
 					currentBranch = repo.CreateBranch(branchName); 				
