@@ -28,7 +28,11 @@ namespace LCU.CDI.Provisioning.Functions
 		{
 			log.LogInformation("GetStorageAccount function processing a request.");			
 
-			dynamic request = JsonConvert.DeserializeObject<dynamic>((await new StreamReader(req.Body).ReadToEndAsync()));
+			var json = await new StreamReader(req.Body).ReadToEndAsync();
+
+			log.LogInformation($"Request: {json}");		
+
+			dynamic request = JsonConvert.DeserializeObject<dynamic>(json);
 
             var stgParams = new StorageAccountParams()
             {
