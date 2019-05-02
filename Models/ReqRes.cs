@@ -15,11 +15,11 @@ namespace LCU.CDI.Provisioning.Models
         public virtual dynamic Parameters { get; set; }        
 
         [JsonProperty("templateURL")]
-        public virtual string TemplateURL { get; set; }
+        public virtual string TemplateLink { get; set; }
 
-        public GetResourceTemplateResponse(string templateURL, dynamic parameters)
+        public GetResourceTemplateResponse(string templateLink, dynamic parameters)
         {
-            TemplateURL = templateURL;
+            TemplateLink = templateLink;
 
             Parameters = parameters;
         }

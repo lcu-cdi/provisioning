@@ -46,12 +46,13 @@ namespace LCU.CDI.Provisioning.Functions
 		public static async Task<Status> CommitTemplate(string branchName, string repoPath, string comment, dynamic template, 
 															dynamic parameters)
 		{
+			var gitURL = Environment.GetEnvironmentVariable("TEMPLATES_REPO_URL");
 			var gitUser = Environment.GetEnvironmentVariable("TEMPLATES_REPO_UNAME");
 			var gitPw = Environment.GetEnvironmentVariable("TEMPLATES_REPO_PW");
 
             var cloneOptions = new CloneOptions();
             cloneOptions.CredentialsProvider = (url, user, cred) => new UsernamePasswordCredentials { Username = gitUser, Password = gitPw };
-            Repository.Clone("https://fathym.visualstudio.com/Low%20Code%20Development/_git/Provisioning%20Templates", repoPath, cloneOptions);			
+            Repository.Clone(gitURL, repoPath, cloneOptions);			
 
 			using (var repo = new Repository(repoPath))
 			{
@@ -76,7 +77,7 @@ namespace LCU.CDI.Provisioning.Functions
                 var remote = repo.Network.Remotes["origin"];
                 var pushRefSpec = $"refs/heads/{branchName}";				
 
-				var options = new LibGit2Sharp.PushOptions()
+				var options = new PushOptions()
 				{
 					CredentialsProvider = new CredentialsHandler
 					(
