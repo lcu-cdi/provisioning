@@ -37,7 +37,7 @@ namespace LCU.CDI.Provisioning.Functions
 			try
 			{
 				response.Status = await CommitTemplate($"templates/{Convert.ToString(request.name)}", Path.Combine(context.FunctionDirectory, "repo"),
-										Convert.ToString(request.comment), request.template);
+										Convert.ToString(request.comment), request.template, log);
 			}
 			catch (Exception ex)
 			{
@@ -47,26 +47,39 @@ namespace LCU.CDI.Provisioning.Functions
 			return new JsonResult(response, new JsonSerializerSettings());
 		}
 
-		public static async Task<Status> CommitTemplate(string branchName, string repoPath, string comment, dynamic template)
+		public static async Task<Status> CommitTemplate(string branchName, string repoPath, string comment, dynamic template, ILogger log)
 		{
 			var gitURL = Environment.GetEnvironmentVariable("TEMPLATES_REPO_URL");
 			var gitUser = Environment.GetEnvironmentVariable("TEMPLATES_REPO_UNAME");
 			var gitPw = Environment.GetEnvironmentVariable("TEMPLATES_REPO_PW");
 
-            var cloneOptions = new CloneOptions();
-            cloneOptions.CredentialsProvider = (url, user, cred) => new UsernamePasswordCredentials { Username = gitUser, Password = gitPw };
-            Repository.Clone(gitURL, repoPath, cloneOptions);			
+			if(!Directory.Exists(repoPath))
+			{
+				log.LogInformation($"Cloning repo {gitURL} to {repoPath}");	
+				var cloneOptions = new CloneOptions();
+				cloneOptions.CredentialsProvider = (url, user, cred) => new UsernamePasswordCredentials { Username = gitUser, Password = gitPw };
+				Repository.Clone(gitURL, repoPath, cloneOptions);			
+			}
 
 			using (var repo = new Repository(repoPath))
 			{
 				var branch = repo.Branches[branchName];
-
+				
 				var currentBranch = Commands.Checkout(repo, repo.Branches["master"]);
 
 				if (branch == null)
-					currentBranch = repo.CreateBranch(branchName); 				
-				else currentBranch = Commands.Checkout(repo , branch);				
-								
+				{
+					log.LogInformation($"Creating branch {branchName}");	
+					currentBranch = Commands.Checkout(repo, repo.CreateBranch(branchName));				
+				}
+				else 
+				{
+					log.LogInformation($"Branch {branchName} already exists");	
+					currentBranch = Commands.Checkout(repo , branch);								
+				}
+
+				log.LogInformation($"Working from {branchName}");				
+												
 				File.WriteAllText(Path.Combine(repo.Info.WorkingDirectory, "template.json"), Convert.ToString(template));
 
 				Commands.Stage(repo, "*");
@@ -74,6 +87,7 @@ namespace LCU.CDI.Provisioning.Functions
 				var author = new Signature("AzureDevOps", "@devops", DateTime.Now);
 				var committer = author;
 
+				log.LogInformation($"Committing {branchName}");	
 				var commit = repo.Commit(comment ?? "updating template", author, committer);
 
                 var remote = repo.Network.Remotes["origin"];
@@ -92,7 +106,10 @@ namespace LCU.CDI.Provisioning.Functions
 					)
 				};
 
+				log.LogInformation($"Pushing {branchName}");	
 				repo.Network.Push(remote, pushRefSpec, options);
+
+				log.LogInformation($"SaveTemplate completed succesfully");	
 			}
 
 			return Status.Success;
