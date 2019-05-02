@@ -36,7 +36,7 @@ namespace LCU.CDI.Provisioning.Functions
 
 			try
 			{
-				response.Status = CommitTemplate($"templates/{Convert.ToString(request.name)}", Path.Combine(context.FunctionDirectory, "repo"),
+				response.Status = await CommitTemplate($"templates/{Convert.ToString(request.name)}", Path.Combine(context.FunctionDirectory, "repo"),
 										Convert.ToString(request.comment), request.template);
 			}
 			catch (Exception ex)
