@@ -67,7 +67,7 @@ namespace LCU.CDI.Provisioning.Functions
 					currentBranch = repo.CreateBranch(branchName); 				
 				else currentBranch = Commands.Checkout(repo , branch);				
 								
-				File.WriteAllText(Path.Combine(repo.Info.WorkingDirectory, "template.json"), template.ToJSON());
+				File.WriteAllText(Path.Combine(repo.Info.WorkingDirectory, "template.json"), Convert.ToString(template));
 
 				Commands.Stage(repo, "*");
 
