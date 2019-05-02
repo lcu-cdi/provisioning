@@ -43,11 +43,11 @@ namespace LCU.CDI.Provisioning.Functions
 
 			var templateParams = new DeploymentParameters(stgParams.ToDynamic()).ToDynamic();
 
-			var response = new BaseResponse<GetResourceTemplateResponse>()
+			var response = new BaseResponse<LinkedResourceTemplate>()
 			{
 				Status = Status.Success,
 
-				Model = new GetResourceTemplateResponse(TemplateURL, templateParams)
+				Model = new LinkedResourceTemplate(TemplateURL, templateParams)
 			};
 
 			log.LogInformation("GetStorageAccount function processed a request.");	
