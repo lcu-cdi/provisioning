@@ -36,9 +36,9 @@ namespace LCU.CDI.Provisioning.Functions
 
             var stgParams = new StorageAccountParams()
             {
-                AccessTier = new ParamType(request.accessTier),
-                Location = new ParamType(request.location),
-                Name = new ParamType(request.name)
+                AccessTier = new ParamType(Convert.ToString(request.accessTier)),
+                Location = new ParamType(Convert.ToString(request.location)),
+                Name = new ParamType(Convert.ToString(request.name))
             };
 
 			var templateParams = new DeploymentParameters(stgParams.ToDynamic()).ToDynamic();
