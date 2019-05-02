@@ -26,14 +26,18 @@ namespace LCU.CDI.Provisioning.Functions
 		{
 			log.LogInformation("SaveTemplate function processed a request.");			
 
-			dynamic request = req.Body.ToDynamic();			
+			var json = await new StreamReader(req.Body).ReadToEndAsync();
+
+			log.LogInformation($"Request: {json}");	
+
+			dynamic request = JsonConvert.DeserializeObject<dynamic>(json);	
 
 			var response = new BaseResponse();
 
 			try
 			{
 				response.Status = CommitTemplate($"templates/{request.name}", Path.Combine(context.FunctionDirectory, "repo"),
-										request.comment, request.template, request.parameters);
+										request.comment, request.template);
 			}
 			catch (Exception ex)
 			{
@@ -43,8 +47,7 @@ namespace LCU.CDI.Provisioning.Functions
 			return new JsonResult(response, new JsonSerializerSettings());
 		}
 
-		public static async Task<Status> CommitTemplate(string branchName, string repoPath, string comment, dynamic template, 
-															dynamic parameters)
+		public static async Task<Status> CommitTemplate(string branchName, string repoPath, string comment, dynamic template)
 		{
 			var gitURL = Environment.GetEnvironmentVariable("TEMPLATES_REPO_URL");
 			var gitUser = Environment.GetEnvironmentVariable("TEMPLATES_REPO_UNAME");
@@ -65,7 +68,6 @@ namespace LCU.CDI.Provisioning.Functions
 				else currentBranch = Commands.Checkout(repo , branch);				
 								
 				File.WriteAllText(Path.Combine(repo.Info.WorkingDirectory, "template.json"), template.ToJSON());
-				File.WriteAllText(Path.Combine(repo.Info.WorkingDirectory, "params.json"), parameters.ToJSON());
 
 				Commands.Stage(repo, "*");
 
