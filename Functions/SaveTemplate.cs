@@ -22,7 +22,7 @@ namespace LCU.CDI.Provisioning.Functions
 		[FunctionName("SaveTemplate")]
 		public static async Task<IActionResult> Run(
 			[HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
-			ILogger log)
+			ILogger log, ExecutionContext context)
 		{
 			log.LogInformation("SaveTemplate function processed a request.");			
 
@@ -32,7 +32,8 @@ namespace LCU.CDI.Provisioning.Functions
 
 			try
 			{
-				response.Status = CommitTemplate($"templates/{request.name}", request.comment, request.template, request.parameters);
+				response.Status = CommitTemplate($"templates/{request.name}", Path.Combine(context.FunctionDirectory, "repo"),
+										request.comment, request.template, request.parameters);
 			}
 			catch (Exception ex)
 			{
@@ -42,17 +43,21 @@ namespace LCU.CDI.Provisioning.Functions
 			return new JsonResult(response, new JsonSerializerSettings());
 		}
 
-		public static async Task<Status> CommitTemplate(string branchName, string comment, dynamic template, dynamic parameters)
+		public static async Task<Status> CommitTemplate(string branchName, string repoPath, string comment, dynamic template, 
+															dynamic parameters)
 		{
-			var gitRepoPath = Environment.GetEnvironmentVariable("TEMPLATES_REPO_LOCALPATH");
 			var gitUser = Environment.GetEnvironmentVariable("TEMPLATES_REPO_UNAME");
 			var gitPw = Environment.GetEnvironmentVariable("TEMPLATES_REPO_PW");
 
-			using (var repo = new Repository(gitRepoPath))
+            var cloneOptions = new CloneOptions();
+            cloneOptions.CredentialsProvider = (url, user, cred) => new UsernamePasswordCredentials { Username = gitUser, Password = gitPw };
+            Repository.Clone("https://fathym.visualstudio.com/Low%20Code%20Development/_git/Provisioning%20Templates", repoPath, cloneOptions);			
+
+			using (var repo = new Repository(repoPath))
 			{
 				var branch = repo.Branches[branchName];
 
-				Branch currentBranch = Commands.Checkout(repo, repo.Branches["master"]);
+				var currentBranch = Commands.Checkout(repo, repo.Branches["master"]);
 
 				if (branch == null)
 					currentBranch = repo.CreateBranch(branchName); 				

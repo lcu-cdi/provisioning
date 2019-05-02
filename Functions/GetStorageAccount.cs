@@ -19,7 +19,7 @@ namespace LCU.CDI.Provisioning.Functions
 {	
 	public static class GetStorageAccount
 	{
-		public const string TemplateURL = "https://lcuintbfb9.blob.core.windows.net/arm-templates/StorageAccount.json";
+		public const string TemplateURL = "https://lcuintbfb9.blob.core.windows.net/arm-templates/StorageAccount.json?sp=r&st=2019-05-01T21:54:49Z&se=2025-05-02T05:54:49Z&spr=https&sv=2018-03-28&sig=ewYbPL3OLB44pwTUl6vt18rr%2F%2F3T4bq2ohdIz5TQBIU%3D&sr=b";
 
 		[FunctionName("GetStorageAccount")]
 		public static async Task<IActionResult> Run(
