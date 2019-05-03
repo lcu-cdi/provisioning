@@ -36,18 +36,16 @@ namespace LCU.CDI.Provisioning.Functions
 
             var stgParams = new StorageAccountParams()
             {
-                AccessTier = new ParamType(Convert.ToString(request.accessTier)),
-                Location = new ParamType(Convert.ToString(request.location)),
-                Name = new ParamType(Convert.ToString(request.name))
+                AccessTier = Convert.ToString(request.accessTier),
+                Location = Convert.ToString(request.location),
+                Name = Convert.ToString(request.name)
             };
-
-			var templateParams = new DeploymentParameters(stgParams.ToDynamic()).ToDynamic();
 
 			var response = new BaseResponse<LinkedResourceTemplate>()
 			{
 				Status = Status.Success,
 
-				Model = new LinkedResourceTemplate(TemplateURL, templateParams)
+				Model = new LinkedResourceTemplate(TemplateURL, stgParams.ToDynamic())
 			};
 
 			log.LogInformation("GetStorageAccount function processed a request.");	

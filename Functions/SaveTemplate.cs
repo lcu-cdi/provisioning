@@ -80,7 +80,7 @@ namespace LCU.CDI.Provisioning.Functions
 
 				log.LogInformation($"Working from {branchName}");				
 												
-				File.WriteAllText(Path.Combine(repo.Info.WorkingDirectory, "template.json"), Convert.ToString(template));
+				File.WriteAllText(Path.Combine(repo.Info.WorkingDirectory, "template.json"), JsonConvert.SerializeObject(template));
 
 				Commands.Stage(repo, "*");
 
