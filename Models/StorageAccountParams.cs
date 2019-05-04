@@ -6,34 +6,29 @@ using LCU.CDI.Provisioning;
 
 namespace LCU.CDI.Provisioning.Models
 {
-    public class StorageAccountParams : ResourceParams
+    public class StorageAccountParams
     {
         #region Properties
 
         //DefaultValue: AccessTiers.Hot
         [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("storageAccount_accessTier")]
-        public virtual string storageAccount_accessTier { get; set; }
+        public virtual string AccessTier { get; set; }
 
         //Required
         [JsonProperty("storageAccount_location")]
-        public virtual string storageAccount_location { get; set; }
+        public virtual string Location { get; set; }
 
         //Required
         [JsonProperty("storageAccount_name")]
-        public virtual string storageAccount_name { get; set; }
+        public virtual string Name { get; set; }
 
         #endregion
 
         public StorageAccountParams()
         {    
-            storageAccount_accessTier = AccessTiers.Hot.ToString();
+            AccessTier = AccessTiers.Hot.ToString();
         }
-    }
-
-    public class ResourceParams
-    {
-
     }
 
     public enum AccessTiers 

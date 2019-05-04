@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace LCU.CDI.Provisioning.Models
 {
-    public class LinkedResourceTemplate
+    public class LinkedResourceTemplate<ParamsType>
     {
         #region Properties
 
@@ -23,7 +23,7 @@ namespace LCU.CDI.Provisioning.Models
 
         #endregion
 
-        public LinkedResourceTemplate(string templateLinkURI, dynamic parameters)
+        public LinkedResourceTemplate(string templateLinkURI, ParamsType parameters)
         {    
             APIVersion = "2017-05-10";
 
@@ -31,7 +31,7 @@ namespace LCU.CDI.Provisioning.Models
 
             Type = "Microsoft.Resources/deployments";
 
-            Properties = new Properties()
+            Properties = new Properties<ParamsType>()
             {
                 Mode = "incremental",
                 TemplateLink = new TemplateLink()
@@ -44,13 +44,13 @@ namespace LCU.CDI.Provisioning.Models
         }
     }
 
-    public class Properties
+    public class Properties<ParamsType>
     {
         [JsonProperty("mode")]
         public virtual string Mode { get; set; }  
 
         [JsonProperty("parameters")]
-        public virtual dynamic Parameters { get; set; }    
+        public virtual ParamsType Parameters { get; set; }    
 
         [JsonProperty("templateLink")]
         public virtual TemplateLink TemplateLink { get; set; }                                
