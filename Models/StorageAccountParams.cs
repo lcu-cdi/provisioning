@@ -13,25 +13,25 @@ namespace LCU.CDI.Provisioning.Models
         //DefaultValue: AccessTiers.Hot
         [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("storageAccount_accessTier")]
-        public virtual string AccessTier { get; set; }
+        public virtual string storageAccount_accessTier { get; set; }
 
         //Required
         [JsonProperty("storageAccount_location")]
-        public virtual string Location { get; set; }
+        public virtual string storageAccount_location { get; set; }
 
         //Required
         [JsonProperty("storageAccount_name")]
-        public virtual string Name { get; set; }
+        public virtual string storageAccount_name { get; set; }
 
         #endregion
 
         public StorageAccountParams()
         {    
-            AccessTier = AccessTiers.Hot.ToString();
+            storageAccount_accessTier = AccessTiers.Hot.ToString();
         }
     }
 
-    public abstract class ResourceParams
+    public class ResourceParams
     {
 
     }

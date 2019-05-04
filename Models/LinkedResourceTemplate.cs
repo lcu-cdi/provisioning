@@ -23,7 +23,7 @@ namespace LCU.CDI.Provisioning.Models
 
         #endregion
 
-        public LinkedResourceTemplate(string templateLinkURI, ResourceParams parameters)
+        public LinkedResourceTemplate(string templateLinkURI, dynamic parameters)
         {    
             APIVersion = "2017-05-10";
 
@@ -50,7 +50,7 @@ namespace LCU.CDI.Provisioning.Models
         public virtual string Mode { get; set; }  
 
         [JsonProperty("parameters")]
-        public virtual ResourceParams Parameters { get; set; }    
+        public virtual dynamic Parameters { get; set; }    
 
         [JsonProperty("templateLink")]
         public virtual TemplateLink TemplateLink { get; set; }                                
