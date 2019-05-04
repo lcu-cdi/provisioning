@@ -45,7 +45,7 @@ namespace LCU.CDI.Provisioning.Functions
 			{
 				Status = Status.Success,
 
-				Model = new LinkedResourceTemplate(TemplateURL, stgParams.ToDynamic())
+				Model = new LinkedResourceTemplate(TemplateURL, stgParams)
 			};
 
 			log.LogInformation("GetStorageAccount function processed a request.");	

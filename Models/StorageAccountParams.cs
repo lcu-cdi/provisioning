@@ -6,7 +6,7 @@ using LCU.CDI.Provisioning;
 
 namespace LCU.CDI.Provisioning.Models
 {
-    public class StorageAccountParams 
+    public class StorageAccountParams : ResourceParams
     {
         #region Properties
 
@@ -29,6 +29,11 @@ namespace LCU.CDI.Provisioning.Models
         {    
             AccessTier = AccessTiers.Hot.ToString();
         }
+    }
+
+    public abstract class ResourceParams
+    {
+
     }
 
     public enum AccessTiers 
