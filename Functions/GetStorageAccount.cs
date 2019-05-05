@@ -41,14 +41,14 @@ namespace LCU.CDI.Provisioning.Functions
                 Name = Convert.ToString(request.name)
             };
 
-			var response = new BaseResponse<LinkedResourceTemplate<StorageAccountParams>>()
+			var response = new BaseResponse<dynamic>()
 			{
 				Status = Status.Success,
 
-				Model = new LinkedResourceTemplate<StorageAccountParams>(TemplateURL, stgParams)
+				Model = new LinkedResourceTemplate<StorageAccountParams>(TemplateURL, stgParams).ToDynamic()
 			};
 
-			log.LogInformation("GetStorageAccount function processed a request.");	
+			log.LogInformation($"GetStorageAccount function processed a request: {JsonConvert.SerializeObject(response)}");	
 
 			return new JsonResult(response, new JsonSerializerSettings());
 		}
