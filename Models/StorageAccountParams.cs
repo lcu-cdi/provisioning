@@ -10,8 +10,8 @@ namespace LCU.CDI.Provisioning.Models
     {
         #region Properties
 
-        //DefaultValue: AccessTiers.Hot
-        [JsonConverter(typeof(StringEnumConverter))]
+        //Allowed: Hot, Cold
+        //DefaultValue: Hot
         [JsonProperty("storageAccount_accessTier")]
         public virtual string AccessTier { get; set; }
 
