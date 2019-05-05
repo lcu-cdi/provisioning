@@ -13,21 +13,21 @@ namespace LCU.CDI.Provisioning.Models
         //Allowed: Hot, Cold
         //DefaultValue: Hot
         [JsonProperty("storageAccount_accessTier")]
-        public virtual string AccessTier { get; set; }
+        public virtual ParamType AccessTier { get; set; }
 
         //Required
         [JsonProperty("storageAccount_location")]
-        public virtual string Location { get; set; }
+        public virtual ParamType Location { get; set; }
 
         //Required
         [JsonProperty("storageAccount_name")]
-        public virtual string Name { get; set; }
+        public virtual ParamType Name { get; set; }
 
         #endregion
 
         public StorageAccountParams()
         {    
-            AccessTier = AccessTiers.Hot.ToString();
+            AccessTier = new ParamType(AccessTiers.Hot.ToString());
         }
     }
 

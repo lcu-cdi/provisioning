@@ -36,9 +36,9 @@ namespace LCU.CDI.Provisioning.Functions
 
             var stgParams = new StorageAccountParams()
             {
-                AccessTier = Convert.ToString(request.accessTier),
-                Location = Convert.ToString(request.location),
-                Name = Convert.ToString(request.name)
+                AccessTier = new ParamType(Convert.ToString(request.accessTier)),
+                Location = new ParamType(Convert.ToString(request.location)),
+                Name = new ParamType(Convert.ToString(request.name))
             };
 
 			var response = new BaseResponse<dynamic>()
