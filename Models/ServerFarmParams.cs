@@ -11,11 +11,11 @@ namespace LCU.CDI.Provisioning.Models
         #region Properties
 
         //Required
-        [JsonProperty("serverFarm_location")]
+        [JsonProperty("serverfarms_location")]
         public virtual ParamType Location { get; set; }
 
         //Required
-        [JsonProperty("serverFarm_name")]
+        [JsonProperty("serverfarms_name")]
         public virtual ParamType Name { get; set; }
 
         #endregion
